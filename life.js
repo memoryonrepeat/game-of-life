@@ -5,11 +5,6 @@ function Cell(x,y,isLive){
 	this.y = y;
 	this.isLive = isLive || false;
 	this.symbol = this.isLive ? '*' : '#';
-
-	// Check out 8 neighbors to decide next state
-	this.willLive = function(){
-		return;
-	};
 };
 
 // Overwrite a cell in grid with provided cell (in same coordinates)
@@ -29,7 +24,7 @@ function successor(grid){
 	var height = grid.length;
 	var width = grid[0].length;
 
-	var anomalyCell = new Cell(getRand(0,height-1), getRand(0,width-1), true);
+	var anomalyCell = new Cell(getRand(0,height), getRand(0,width), true);
 	replaceCell(grid, anomalyCell);
 
 	return grid;
@@ -68,7 +63,7 @@ function start(height, width){
 		turn++;
 		console.log('-----------'+turn+'-----------');
 		animate(successor(grid));
-	}, 1000);
+	}, 500);
 };
 
 start(10, 10);
