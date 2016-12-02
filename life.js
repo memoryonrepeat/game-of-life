@@ -1,5 +1,22 @@
 // Conway's game of life simulation
 
+function Cell(x,y,isLive){
+	this.x = x;
+	this.y = y;
+	this.isLive = isLive || false;
+	this.symbol = this.isLive ? '*' : '#';
+
+	// Check out 8 neighbors to decide next state
+	this.willLive = function(){
+		return;
+	};
+};
+
+// Overwrite a cell in grid with provided cell (in same coordinates)
+function replaceCell(grid, cell){
+	grid[cell.x][cell.y] = cell;
+};
+
 function getRand(min, max){
 	return Math.floor(Math.random()*(max - min)+min);
 };
@@ -11,10 +28,10 @@ function successor(grid){
 	// - How to efficiently filter out dead cells ?
 	var height = grid.length;
 	var width = grid[0].length;
-	var newCell = [getRand(0,height-1), getRand(0,width-1)];
-	console.log(newCell);
-	grid[newCell[0]][newCell[1]]='#';
-	// console.log(grid[newCell[0],newCell[1]]);
+
+	var anomalyCell = new Cell(getRand(0,height-1), getRand(0,width-1), true);
+	replaceCell(grid, anomalyCell);
+
 	return grid;
 };
 
@@ -22,7 +39,7 @@ function animate(grid){
 	for (var i=0; i<grid.length; i++){
 		var row = '';
 		for (var j=0; j<grid[i].length; j++){
-			row += grid[i][j];
+			row += grid[i][j].symbol;
 		}
 		console.log(row);
 	}
@@ -34,7 +51,8 @@ function bigbang(height, width){
 	for (var x=0; x<height; x++){
 		var row = [];
 		for (var y=0; y<width; y++){
-			row.push('*');
+			var cell = new Cell(x,y);
+			row.push(cell);
 		}
 		grid.push(row);
 	}
