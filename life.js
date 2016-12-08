@@ -3,7 +3,7 @@
 function Cell(x,y,isLive){
 	this.x = x;
 	this.y = y;
-	this.isLive = isLive || true;
+	this.isLive = isLive;
 };
 
 // Overwrite a cell in grid with provided cell (in same coordinates)
@@ -17,12 +17,13 @@ function getRand(min, max){
 
 function determineNextState(cell, neighbors){
 	var liveCount = 0;
-	if (cell.isLive){
-		for (var i=0; i<neighbors.length; i++){
-			if (neighbors[i].isLive){
-				liveCount++;
-			}
+	// console.log(neighbors);
+	for (var i=0; i<neighbors.length; i++){
+		if (neighbors[i].isLive){
+			liveCount++;
 		}
+	}
+	if (cell.isLive){
 		return (liveCount==2 || liveCount==3); // doesn't die either by under or over population
 	}
 	return liveCount==3; // reincarnates due to reprodution
@@ -31,7 +32,7 @@ function determineNextState(cell, neighbors){
 function evaluateCell(cell, currentGrid){
 	if (cell.x == 0){
 		if (cell.y == 0){ // top left, only check 3 neighbors
-			cell.isLive = determineNextState(cell, [ currentGrid[cell.x+1][cell.y], currentGrid[cell.x+1][cell.y+1], currentGrid[cell.x, cell.y+1] ]);
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.x+1][cell.y], currentGrid[cell.x+1][cell.y+1], currentGrid[cell.x][cell.y+1] ]);
 		}
 	}
 };
@@ -44,7 +45,19 @@ function successor(grid){
 	var height = grid.length;
 	var width = grid[0].length;
 
-	var nextGrid = grid;
+	// Clone current grid
+	// TODO: Find a more efficient way
+	var nextGrid = [];
+	for (var y=0; y<height; y++){
+		var row = [];
+		for (var x=0; x<width; x++){
+			row.push(grid[x][y]);
+		}
+		nextGrid.push(row);
+	}
+
+	// TODO: verify if works with 2d array
+	// var nextGrid = grid.slice();
 
 	for (var j=0; j<height; j++){
 		for (var i=0; i<width; i++){
@@ -79,11 +92,12 @@ function bigbang(height, width){
 	for (var y=0; y<height; y++){
 		var row = [];
 		for (var x=0; x<width; x++){
-			var cell = new Cell(x,y);
+			var cell = new Cell(x,y, true); // Initiate all live cells
 			row.push(cell);
 		}
 		grid.push(row);
 	}
+	grid[0][0] = new Cell(0,0,false); // testing - dead cell should reincarnate
 	return grid;
 };
 
