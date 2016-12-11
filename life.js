@@ -1,9 +1,10 @@
 // Conway's game of life simulation
 
-function Cell(x,y,isLive){
-	this.x = x;
+function Cell(y,x,isLive,toTest){
 	this.y = y;
+	this.x = x;
 	this.isLive = isLive;
+	this.toTest = toTest;
 };
 
 // Overwrite a cell in grid with provided cell (in same coordinates)
@@ -17,14 +18,16 @@ function getRand(min, max){
 
 function determineNextState(cell, neighbors){
 	var liveCount = 0;
-	// console.log(neighbors);
+	if (cell.toTest){
+		console.log(neighbors);
+	}
 	for (var i=0; i<neighbors.length; i++){
 		if (neighbors[i].isLive){
 			liveCount++;
 		}
 	}
 	if (cell.isLive){
-		return (liveCount==2 || liveCount==3); // doesn't die either by under or over population
+		return (liveCount==2 || liveCount==4); // doesn't die either by under or over population
 	}
 	return liveCount==3; // reincarnates due to reprodution
 };
@@ -32,7 +35,10 @@ function determineNextState(cell, neighbors){
 function evaluateCell(cell, currentGrid){
 	if (cell.x == 0){
 		if (cell.y == 0){ // top left, only check 3 neighbors
-			cell.isLive = determineNextState(cell, [ currentGrid[cell.x+1][cell.y], currentGrid[cell.x+1][cell.y+1], currentGrid[cell.x][cell.y+1] ]);
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x+1], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y+1][cell.x] ]);
+		}
+		else if (cell.y == currentGrid.length-1){ // bottom left, only check 3 neighbors
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x+1], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y-1][cell.x] ]);
 		}
 	}
 };
@@ -51,7 +57,7 @@ function successor(grid){
 	for (var y=0; y<height; y++){
 		var row = [];
 		for (var x=0; x<width; x++){
-			row.push(grid[x][y]);
+			row.push(grid[y][x]);
 		}
 		nextGrid.push(row);
 	}
@@ -61,7 +67,7 @@ function successor(grid){
 
 	for (var j=0; j<height; j++){
 		for (var i=0; i<width; i++){
-			evaluateCell(nextGrid[i][j], grid);
+			evaluateCell(nextGrid[j][i], grid);
 		}
 	}
 
@@ -75,7 +81,7 @@ function animate(grid){
 	for (var j=0; j<grid.length; j++){
 		var row = '';
 		for (var i=0; i<grid[j].length; i++){
-			if (grid[i][j].isLive){
+			if (grid[j][i].isLive){
 				row += 'O';
 			}
 			else{
@@ -92,12 +98,12 @@ function bigbang(height, width){
 	for (var y=0; y<height; y++){
 		var row = [];
 		for (var x=0; x<width; x++){
-			var cell = new Cell(x,y, true); // Initiate all live cells
+			var cell = new Cell(y,x, true, false); // Initiate all live cells
 			row.push(cell);
 		}
 		grid.push(row);
 	}
-	grid[0][0] = new Cell(0,0,false); // testing - dead cell should reincarnate
+	grid[height-1][0] = new Cell(height-1,0,false, true); // testing - dead cell should reincarnate
 	return grid;
 };
 
@@ -113,4 +119,4 @@ function start(height, width){
 	}, 500);
 };
 
-start(10, 10);
+start(7, 10);
