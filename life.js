@@ -40,6 +40,9 @@ function evaluateCell(cell, currentGrid){
 		else if (cell.y == currentGrid.length-1){ // bottom left, only check 3 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x+1], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y-1][cell.x] ]);
 		}
+		else{ // leftmost column, check 5 neighbors
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y-1][cell.x], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y][cell.x+1], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y+1][cell.x] ]);
+		}
 	}
 };
 
