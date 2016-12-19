@@ -49,6 +49,9 @@ function evaluateCell(cell, currentGrid){
 			cell.toTest = true;
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y+1][cell.x] ]);
 		}
+		else if (cell.y == currentGrid.length-1){ // bottom right, only check 3 neighbors
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y-1][cell.x-1], currentGrid[cell.y-1][cell.x] ]);
+		} 
 	}
 };
 
@@ -116,9 +119,10 @@ function bigbang(height, width){
 	return grid;
 };
 
+
 function start(height, width){
 	var turn = 0;
-	grid = bigbang(height, width);
+	grid = bigbang(height, width); // currently only support square grids (height == width)
 	console.log('-----------BEGIN-----------\n');
 	animate(grid);
 	setInterval(function(){
