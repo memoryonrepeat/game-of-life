@@ -40,8 +40,14 @@ function evaluateCell(cell, currentGrid){
 		else if (cell.y == currentGrid.length-1){ // bottom left, only check 3 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x+1], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y-1][cell.x] ]);
 		}
-		else{ // leftmost column, check 5 neighbors
+		else{ // leftmost column except 2 corners, check 5 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y-1][cell.x], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y][cell.x+1], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y+1][cell.x] ]);
+		}
+	}
+	else if (cell.x == currentGrid.length-1){
+		if (cell.y == 0){ // top right, only check 3 neighbors
+			cell.toTest = true;
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y+1][cell.x] ]);
 		}
 	}
 };
@@ -106,7 +112,7 @@ function bigbang(height, width){
 		}
 		grid.push(row);
 	}
-	grid[height-1][0] = new Cell(height-1,0,false, true); // testing - dead cell should reincarnate
+	// grid[height-1][0] = new Cell(height-1,0,false, true); // testing - dead cell should reincarnate
 	return grid;
 };
 
@@ -122,4 +128,4 @@ function start(height, width){
 	}, 500);
 };
 
-start(7, 10);
+start(10, 10);
