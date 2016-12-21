@@ -55,6 +55,11 @@ function evaluateCell(cell, currentGrid){
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y+1][cell.x], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y][cell.x-1], currentGrid[cell.y-1][cell.x-1], currentGrid[cell.y-1][cell.x] ]);
 		}
 	}
+	else{
+		if (cell.y == 0){ // top row except 2 corners, check 5 neighbors
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y+1][cell.x], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y][cell.x+1] ] );
+		}
+	}
 };
 
 function successor(grid){
