@@ -40,7 +40,7 @@ function determineNextState(cell, neighbors){
 };
 
 function evaluateCell(cell, currentGrid){
-	if (cell.x == 0){
+	if (cell.x == 0){ // left column
 		if (cell.y == 0){ // top left, only check 3 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x+1], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y+1][cell.x] ]);
 		}
@@ -51,7 +51,7 @@ function evaluateCell(cell, currentGrid){
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y-1][cell.x], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y][cell.x+1], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y+1][cell.x] ]);
 		}
 	}
-	else if (cell.x == currentGrid.length-1){
+	else if (cell.x == currentGrid.length-1){ // right column
 		if (cell.y == 0){ // top right, only check 3 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y+1][cell.x] ]);
 		}
@@ -62,12 +62,15 @@ function evaluateCell(cell, currentGrid){
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y+1][cell.x], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y][cell.x-1], currentGrid[cell.y-1][cell.x-1], currentGrid[cell.y-1][cell.x] ]);
 		}
 	}
-	else{
+	else{ // anything in between left and right column
 		if (cell.y == 0){ // top row except 2 corners, check 5 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y+1][cell.x], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y][cell.x+1] ] );
 		}
 		else if (cell.y == currentGrid.length-1){ // bottom row except 2 corners, check 5 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y-1][cell.x-1], currentGrid[cell.y-1][cell.x], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y][cell.x+1] ] );
+		}
+		else{ // any non-edge cell, check full 8 neighbors
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y-1][cell.x-1], currentGrid[cell.y-1][cell.x], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y][cell.x+1], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y+1][cell.x], currentGrid[cell.y+1][cell.x-1] ]);
 		}
 	}
 };
