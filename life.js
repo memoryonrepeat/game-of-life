@@ -1,4 +1,11 @@
 // Conway's game of life simulation
+// TODO: 
+// - Parameterize inputs
+// - Choose template --> generate grid and simulate
+// - Refresh output for each iteration (no separate printing)
+// - Better UI
+// - Refactor
+// - Customizable grid shape
 
 function Cell(y,x,isLive,toTest){
 	this.y = y;
@@ -59,6 +66,9 @@ function evaluateCell(cell, currentGrid){
 		if (cell.y == 0){ // top row except 2 corners, check 5 neighbors
 			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y+1][cell.x-1], currentGrid[cell.y+1][cell.x], currentGrid[cell.y+1][cell.x+1], currentGrid[cell.y][cell.x+1] ] );
 		}
+		else if (cell.y == currentGrid.length-1){ // bottom row except 2 corners, check 5 neighbors
+			cell.isLive = determineNextState(cell, [ currentGrid[cell.y][cell.x-1], currentGrid[cell.y-1][cell.x-1], currentGrid[cell.y-1][cell.x], currentGrid[cell.y-1][cell.x+1], currentGrid[cell.y][cell.x+1] ] );
+		}
 	}
 };
 
@@ -76,7 +86,10 @@ function successor(grid){
 	for (var y=0; y<height; y++){
 		var row = [];
 		for (var x=0; x<width; x++){
-			row.push(grid[y][x]);
+			// Need to push new cell here
+			// If otherwise just push grid[y][x], newGrid with become just a reference to grid
+			// When testing with lower rows, this will affect since earlier rows have been updated before
+			row.push(new Cell(x,y,grid[y][x].isLive,grid[y][x].toTest));
 		}
 		nextGrid.push(row);
 	}
@@ -123,6 +136,8 @@ function bigbang(height, width){
 		grid.push(row);
 	}
 	// grid[height-1][0] = new Cell(height-1,0,false, true); // testing - dead cell should reincarnate
+	/*grid[9][8].toTest = true;
+	grid[0][1].toTest = true;*/
 	return grid;
 };
 
