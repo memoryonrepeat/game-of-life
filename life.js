@@ -6,6 +6,7 @@
 // - Better UI
 // - Refactor
 // - Customizable grid shape
+// - Keep cell history to inspect
 
 var allAliveTemplate = ['OOOOOOOOOO',
 						'OOOOOOOOOO',
@@ -17,7 +18,25 @@ var allAliveTemplate = ['OOOOOOOOOO',
 						'OOOOOOOOOO',
 						'OOOOOOOOOO',
 						'OOOOOOOOOO'];
-var template = allAliveTemplate;
+
+var blockTemplate = ['OOOO',
+					 'O__O',
+					 'O__O',
+					 'OOOO'];
+
+var blinkerTemplate = ['OOOOO',
+					   'OO_OO',
+					   'OO_OO',
+					   'OO_OO',
+					   'OOOOO'];
+
+var testTemplate = ['_O_',
+					'_O_',
+					'_O_'];
+
+var template = testTemplate;
+
+// NOTE: blinkerTemplate doesn't seem to work. Why ?
 
 function Cell(y,x,isLive,toTest){
 	this.y = y;
@@ -26,19 +45,10 @@ function Cell(y,x,isLive,toTest){
 	this.toTest = toTest;
 };
 
-// Overwrite a cell in grid with provided cell (in same coordinates)
-function replaceCell(grid, cell){
-	grid[cell.x][cell.y] = cell;
-};
-
-function getRand(min, max){
-	return Math.floor(Math.random()*(max - min)+min);
-};
-
 function determineNextState(cell, neighbors){
 	var liveCount = 0;
 	if (cell.toTest){
-		console.log(neighbors);
+		console.log(cell,neighbors);
 	}
 	for (var i=0; i<neighbors.length; i++){
 		if (neighbors[i].isLive){
@@ -104,7 +114,7 @@ function successor(grid){
 			// Need to push new cell here
 			// If otherwise just push grid[y][x], newGrid with become just a reference to grid
 			// When testing with lower rows, this will affect since earlier rows have been updated before
-			row.push(new Cell(x,y,grid[y][x].isLive,grid[y][x].toTest));
+			row.push(new Cell(y,x,grid[y][x].isLive,grid[y][x].toTest));
 		}
 		nextGrid.push(row);
 	}
@@ -117,9 +127,6 @@ function successor(grid){
 			evaluateCell(nextGrid[j][i], grid);
 		}
 	}
-
-	/*var anomalyCell = new Cell(getRand(0,height), getRand(0,width), true);
-	replaceCell(grid, anomalyCell);*/
 
 	return nextGrid;
 };
@@ -146,13 +153,17 @@ function bigbang(height, width){
 		var row = [];
 		for (var x=0; x<width; x++){
 			var cell = new Cell(y,x, template[y][x]==='O' ? true : false, false); // Initiate based on template
+			// var cell = new Cell(y,x, false, false); // Initiate based on template
 			row.push(cell);
 		}
 		grid.push(row);
 	}
-	// grid[height-1][0] = new Cell(height-1,0,false, true); // testing - dead cell should reincarnate
-	/*grid[9][8].toTest = true;
-	grid[0][1].toTest = true;*/
+	
+	/*grid[0][1].isLive = true;
+	grid[1][1].isLive = true;
+	grid[2][1].isLive = true;*/
+
+	// grid[1][1].toTest = true;
 	return grid;
 };
 
@@ -166,7 +177,9 @@ function start(height, width){
 		turn++;
 		console.log('-----------'+turn+'-----------\n');
 		animate(successor(grid));
+		grid = successor(grid);
 	}, 500);
 };
 
 start(template.length, template[0].length);
+// start(3,3);
