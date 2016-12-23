@@ -1,11 +1,23 @@
 // Conway's game of life simulation
 // TODO: 
 // - Parameterize inputs
-// - Choose template --> generate grid and simulate
+// - Choose template --> generate grid and simulate (done)
 // - Refresh output for each iteration (no separate printing)
 // - Better UI
 // - Refactor
 // - Customizable grid shape
+
+var allAliveTemplate = ['OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO',
+						'OOOOOOOOOO'];
+var template = allAliveTemplate;
 
 function Cell(y,x,isLive,toTest){
 	this.y = y;
@@ -133,7 +145,7 @@ function bigbang(height, width){
 	for (var y=0; y<height; y++){
 		var row = [];
 		for (var x=0; x<width; x++){
-			var cell = new Cell(y,x, true, false); // Initiate all live cells
+			var cell = new Cell(y,x, template[y][x]==='O' ? true : false, false); // Initiate based on template
 			row.push(cell);
 		}
 		grid.push(row);
@@ -157,4 +169,4 @@ function start(height, width){
 	}, 500);
 };
 
-start(10, 10);
+start(template.length, template[0].length);
