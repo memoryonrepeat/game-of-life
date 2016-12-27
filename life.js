@@ -7,36 +7,61 @@
 // - Refactor
 // - Customizable grid shape
 // - Keep cell history to inspect
+// - Glider pattern with self-shifting grid
+// - Glider in 3d
 
-var allAliveTemplate = ['OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO',
-						'OOOOOOOOOO'];
+var templates = {
+	still: {},
+	oscillator: {},
+	spaceship: {}
+};
 
-var blockTemplate = ['OOOO',
-					 'O__O',
-					 'O__O',
-					 'OOOO'];
+templates.still.block = ['OOOO',
+			 			 'O__O',
+						 'O__O',
+						 'OOOO'];
 
-var blinkerTemplate = ['OOOOO',
-					   'OO_OO',
-					   'OO_OO',
-					   'OO_OO',
-					   'OOOOO'];
+templates.still.boat =  ['_O_',
+			 			 'O_O',
+			 			 '_OO'];
 
-var testTemplate = ['_O_',
-					'_O_',
-					'_O_'];
+templates.oscillator.toad = ['____',
+							 '_OOO',
+							 'OOO_',
+							 '____'];
 
-var template = testTemplate;
+templates.oscillator.blinker = ['_O_',
+							    '_O_',
+							    '_O_'];
 
-// NOTE: blinkerTemplate doesn't seem to work. Why ?
+templates.oscillator.blinker2 =['_____',
+			   					'__O__',
+							    '__O__',
+							    '__O__',
+							    '_____'];
+
+templates.spaceship.glider = ['_O__________________',
+							  '__O_________________',
+							  'OOO_________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',
+							  '____________________',];
+
+var template = templates.spaceship.glider;
 
 function Cell(y,x,isLive,toTest){
 	this.y = y;
