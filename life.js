@@ -9,6 +9,8 @@
 // - Keep cell history to inspect
 // - Glider pattern with self-shifting grid
 // - Glider in 3d
+// - Invent my own pattern ?
+// - Try out interesting stuff on conwaylife.com forum
 
 var templates = {
 	still: {},
@@ -195,14 +197,16 @@ function bigbang(height, width){
 
 function start(height, width){
 	var turn = 0;
-	grid = bigbang(height, width); // currently only support square grids (height == width)
+	var grid = bigbang(height, width); // currently only support square grids (height == width)
+	var nextGrid = null;
 	console.log('-----------BEGIN-----------\n');
 	animate(grid);
 	setInterval(function(){
 		turn++;
 		console.log('-----------'+turn+'-----------\n');
-		animate(successor(grid));
-		grid = successor(grid);
+		nextGrid = successor(grid);
+		animate(nextGrid);
+		grid = nextGrid;
 	}, 500);
 };
 
