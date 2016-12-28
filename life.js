@@ -11,6 +11,7 @@
 // - Glider in 3d
 // - Invent my own pattern ?
 // - Try out interesting stuff on conwaylife.com forum
+// - Visualize using WebGL
 
 var templates = {
 	still: {},
